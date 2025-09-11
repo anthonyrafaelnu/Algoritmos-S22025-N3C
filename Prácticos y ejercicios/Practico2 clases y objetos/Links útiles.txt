@@ -1,0 +1,2 @@
+Búsqueda binaria: https://algorithm-visualizer.org/branch-and-bound/binary-search
+Vectores: https://rafanu.notion.site/Vectores-12950698b3b04d79aafe70da1aa23020
