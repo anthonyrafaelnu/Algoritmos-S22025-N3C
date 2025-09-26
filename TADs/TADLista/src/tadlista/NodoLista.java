@@ -1,20 +1,20 @@
 package tadlista;
 
-public class NodoLista {
+public class NodoLista<T extends Comparable> {
     
-    private int dato;
+    private T dato;
     private NodoLista siguiente;
     
-    public NodoLista(int elDato){
+    public NodoLista(T elDato){
         this.dato = elDato;
         this.siguiente = null;
     }
 
-    public int getDato() {
+    public T getDato() {
         return dato;
     }
 
-    public void setDato(int dato) {
+    public void setDato(T dato) {
         this.dato = dato;
     }
 

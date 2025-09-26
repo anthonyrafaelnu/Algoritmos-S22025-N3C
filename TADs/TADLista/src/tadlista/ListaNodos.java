@@ -1,11 +1,13 @@
 package tadlista;
 
-public class ListaNodos implements ILista {
+public class ListaNodos<T extends Comparable> implements ILista<T> {
     
     private NodoLista lista;
+    private int cantidad;
     
     public ListaNodos(){
         lista = null;
+        cantidad = 0;
     }
 
     @Override
@@ -14,14 +16,15 @@ public class ListaNodos implements ILista {
     }
 
     @Override
-    public void agregarInicio(int n) {
+    public void agregarInicio(T n) {
         NodoLista nuevo = new NodoLista(n);
         nuevo.setSiguiente(lista);
         lista = nuevo;
+        this.cantidad++;
     }
 
     @Override
-    public void agregarFinal(int n) {
+    public void agregarFinal(T n) {
         if(esVacia()){
             agregarInicio(n);
         }else{
@@ -33,6 +36,8 @@ public class ListaNodos implements ILista {
 
             NodoLista nuevo = new NodoLista(n);
             aux.setSiguiente(nuevo);
+            
+            this.cantidad++;
         }
     }
 
@@ -42,6 +47,7 @@ public class ListaNodos implements ILista {
             NodoLista aBorrar = this.lista;
             this.lista = this.lista.getSiguiente();
             aBorrar.setSiguiente(null);
+            this.cantidad--;
         }
     }
 
@@ -56,6 +62,7 @@ public class ListaNodos implements ILista {
                     aux = aux.getSiguiente();
                 }
                 aux.setSiguiente(null);
+                this.cantidad--;
             }
         }
     }
@@ -63,36 +70,82 @@ public class ListaNodos implements ILista {
     @Override
     public void vaciar() {
         this.lista = null;
+        this.cantidad = 0;
     }
 
     @Override
     public void mostrar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        NodoLista aux = this.lista;
+        
+        while(aux != null){
+            System.out.println(aux.getDato());
+            aux = aux.getSiguiente();
+        }
     }
 
     @Override
-    public void agregarOrd(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void agregarOrd(T n) {
+        if(this.lista == null || n.compareTo(this.lista.getDato()) <= 0 ){
+            agregarInicio(n);
+        }else{
+            NodoLista aux = this.lista;
+            while(aux.getSiguiente() != null && aux.getSiguiente().getDato().compareTo(n) > 0){
+                aux = aux.getSiguiente();
+            }
+            
+            NodoLista nuevo = new NodoLista(n);
+            nuevo.setSiguiente(aux.getSiguiente());
+            aux.setSiguiente(nuevo);
+            
+            this.cantidad++;
+        }
     }
 
     @Override
-    public void borrarElemento(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void borrarElemento(T n) {
+        if(this.lista != null){
+            if(this.lista.getDato().equals(n)){
+                borrarInicio();
+            }else{
+                NodoLista aux = this.lista;
+                while(aux.getSiguiente() != null && !aux.getSiguiente().getDato().equals(n)){
+                    aux = aux.getSiguiente();
+                }
+                
+                if(aux.getSiguiente() != null){
+                    NodoLista aBorrar = aux.getSiguiente();
+                    aux.setSiguiente(aux.getSiguiente().getSiguiente());
+                    aBorrar.setSiguiente(null);
+                    
+                    this.cantidad--;
+                }
+            }
+        }
     }
 
     @Override
     public int cantElementos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return cantidad;
     }
 
     @Override
-    public NodoLista obtenerElemento(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public NodoLista obtenerElemento(T n) {
+        NodoLista ret = this.lista;
+        
+        while(ret != null){
+            if(ret.getDato().equals(n)) return ret;
+            ret = ret.getSiguiente();
+        }
+        
+        return ret;
     }
 
     @Override
     public void mostrarREC(NodoLista l) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(l != null){ // Caso base
+            mostrarREC(l.getSiguiente());
+            System.out.println(l.getDato());
+        }
     }
     
 }
